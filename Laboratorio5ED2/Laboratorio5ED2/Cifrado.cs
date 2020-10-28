@@ -8,15 +8,15 @@ namespace Laboratorio5ED2
 {
     public class Cifrado
     {
-        public void CifradoCesar(string cadena)
+        public string CifradoCesar(string cadena)
         {
             Cesar cesar = new Cesar();
-            cesar.Cifrar(cadena);
+            return cesar.Cifrar(cadena);
         }
-        public void DesCifradoCesar(string cadena)
+        public string DesCifradoCesar(string cadena)
         {
             Cesar cesar = new Cesar();
-            cesar.DesCifrar(cadena);
+            return cesar.DesCifrar(cadena);
         }
 
 

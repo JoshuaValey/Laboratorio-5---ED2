@@ -27,42 +27,13 @@ namespace Laboratorio5ED2.TipoCifrado
             this.EncriptLowerAbc = this.EncriptUpperAbc.ToLower();
         }
 
-        public string Cifrar(string cadena)
-        {
-            string salida = "";
+        public string Cifrar(string cadena) => AlgoritmoCesar(cadena, this.UpperAbc, this.EncriptUpperAbc, 
+                                                                                this.LowerAbc, this.EncriptLowerAbc);
+        
 
-            var upperDic = MakeDiccionary(this.UpperAbc, this.EncriptUpperAbc);
-            var lowerDic = MakeDiccionary(this.LowerAbc, this.EncriptLowerAbc);
-
-            foreach (var item in cadena)
-            {
-                if (upperDic.ContainsKey(item))
-                    salida += upperDic[item];
-                else if (lowerDic.ContainsKey(item))
-                    salida += lowerDic[item];
-                else
-                    salida += item;
-            }
-            return salida;
-        }
-
-        public string DesCifrar(string cadena)
-        {
-            string salida = "";
-
-            var upperDic = MakeDiccionary(this.EncriptUpperAbc, this.UpperAbc);
-            var lowerDic = MakeDiccionary(this.EncriptLowerAbc, this.LowerAbc);
-            foreach (var item in cadena)
-            {
-                if (upperDic.ContainsKey(item))
-                    salida += upperDic[item];
-                else if (lowerDic.ContainsKey(item))
-                    salida += lowerDic[item];
-                else
-                    salida += item;
-            }
-            return salida;
-        }
+        public string DesCifrar(string cadena) => AlgoritmoCesar(cadena, this.EncriptUpperAbc, this.UpperAbc,
+                                                                                this.EncriptLowerAbc, this.LowerAbc);
+        
 
         Dictionary<char, char> MakeDiccionary(string originAbc, string changedAbc)
         {
@@ -74,6 +45,25 @@ namespace Laboratorio5ED2.TipoCifrado
             return retorno;
         }
 
+        private string AlgoritmoCesar(string cadena, string uClave, string uValor, 
+            string lClave, string lValor)
+        {
+            string salida = "";
+
+            var upperDic = MakeDiccionary(uClave, uValor);
+            var lowerDic = MakeDiccionary(lClave, lValor);
+
+            foreach (var item in cadena)
+            {
+                if (upperDic.ContainsKey(item))
+                    salida += upperDic[item];
+                else if (lowerDic.ContainsKey(item))
+                    salida += lowerDic[item];
+                else
+                    salida += item;
+            }
+            return salida;
+        }
 
     }
 }
