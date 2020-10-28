@@ -10,6 +10,8 @@ namespace PruebasCifrado
         {
            
             Cifrado cifrado = new Cifrado();
+            byte dato = Convert.ToByte('á');
+            Console.WriteLine(Convert.ToChar(dato));
             
         }
     }
