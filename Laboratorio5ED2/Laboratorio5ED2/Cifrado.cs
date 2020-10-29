@@ -32,15 +32,15 @@ namespace Laboratorio5ED2
         }
 
 
-        public void CifradoRuta(string cadena)
+        public string CifradoRuta(string cadena, int fila, int columna)
         {
             Ruta ruta = new Ruta();
-            ruta.Cifrar(cadena);
+            return ruta.Cifrar(cadena, fila, columna);
         }
-        public void DesCifradoRuta(string cadena)
+        public string DesCifradoRuta(string cadena, int filas, int columnas)
         {
             Ruta ruta = new Ruta();
-            ruta.DesCifrar(cadena);
+            return ruta.DesCifrar(cadena, filas, columnas);
         }
 
     }
