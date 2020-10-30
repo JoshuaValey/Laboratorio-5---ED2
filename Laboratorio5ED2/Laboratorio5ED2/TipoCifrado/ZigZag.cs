@@ -9,11 +9,11 @@ namespace Laboratorio5ED2.TipoCifrado
     internal class ZigZag : ICifrado
     {
 
-        private int numNivel;
+        private byte numNivel;
         private int valoresEnOla;
-        private byte padCharacter = 42;
+        private byte padCharacter = 159; // ƒ
         
-        public ZigZag(int cantidadNiveles)
+        public ZigZag(byte cantidadNiveles)
         {
             this.numNivel = cantidadNiveles;
             this.valoresEnOla = numNivel * 2 - 2;
@@ -24,15 +24,39 @@ namespace Laboratorio5ED2.TipoCifrado
             
             throw new NotImplementedException();
         }
+
+
+        public List<byte> DesCifrar2(byte[] cadena)
+        {
+
+            int niveles = this.numNivel;
+
+            Queue<byte> mensajeEncriptado = new Queue<byte>();
+            foreach (var item in cadena)
+            {
+                mensajeEncriptado.Enqueue(item);
+            }
+
+
+            //Crear Niveles
+            var listaNiveles = new List<Queue<byte>>();
+            for (int i = 0; i < numNivel; i++)
+            {
+                listaNiveles.Add(new Queue<byte>());
+            }
+
+
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Cifrado diferente a la interfaz al usar bytes y no caracteres.
         /// </summary>
         /// <param name="cadena"></param>
-        /// <returns></returns>
+        /// <returns>El primer byte de la lista devuelta es la canti</returns>
         public List<byte> Cifrar2(byte[] cadena)
         {
 
-            //int cantidadOlas;
+            
             Queue<byte> mensaje = new Queue<byte>();
             foreach (var item in cadena)
             {
@@ -47,7 +71,7 @@ namespace Laboratorio5ED2.TipoCifrado
                 listaNiveles.Add(new Queue<byte>());
             }
 
-
+            //Crear zigzag
             int numPadChars = 0;
             while (mensaje.Count != 0)
             {
@@ -55,16 +79,29 @@ namespace Laboratorio5ED2.TipoCifrado
                 LlenarUnaOla(valoresOla, listaNiveles, ref numPadChars);
             }
 
+            //Crar mensaje encriptado en lista de bytes.
+            //Agregar como primer bit el número de niveles... 
             List<byte> resultado = new List<byte>();
 
-            foreach (var item in listaNiveles)
+            for (int i = 0; i < listaNiveles.Count; i++)
             {
-                for (int i = 0; i < item.Count; i++)
+                if (i == 0) resultado.Add(this.numNivel);
+
+                while (listaNiveles[i].Count != 0)
                 {
-                    resultado.Add(item.Dequeue());
+                    resultado.Add(listaNiveles[i].Dequeue());
                 }
             }
 
+
+            //Codigo para prubar con entrada MY SPIDER...
+           /* string depuracion = "";
+
+            foreach (var item in resultado)
+            {
+                depuracion += Convert.ToChar(item);
+
+            }*/
 
             return resultado;
 
@@ -111,6 +148,11 @@ namespace Laboratorio5ED2.TipoCifrado
             }
             return valoresParaOla;
         }
+
+
+
+        
+
 
         public string DesCifrar(string cadena)
         {
