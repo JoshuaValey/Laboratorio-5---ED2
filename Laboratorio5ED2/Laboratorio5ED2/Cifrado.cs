@@ -32,6 +32,8 @@ namespace Laboratorio5ED2
             {
                 cadenaEncript += Convert.ToChar(item);
             }
+            //////////////////////
+            zigzag.DesCifrar2(listado);
 
             int flag = 1;
         }
