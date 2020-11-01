@@ -8,6 +8,7 @@ namespace Laboratorio5ED2.TipoCifrado
 {
     internal class Ruta
     {
+        int contadorSignos = 0;
         private List<char[,]> llenarArreglos(string cadena, int h, int b) 
         {
             int cantidadCaracteres = cadena.Length;
@@ -41,6 +42,7 @@ namespace Laboratorio5ED2.TipoCifrado
                         else
                         {
                             nuevoArreglo[j, k] = Convert.ToChar("$");
+                            contadorSignos++;
                         }
                     }
                 }
@@ -85,7 +87,7 @@ namespace Laboratorio5ED2.TipoCifrado
         public string Cifrar(string cadena, int filas, int columnas)
         {
             List<char[,]> listaArreglos = llenarArreglos(cadena, filas, columnas);
-            string cifrado = leerListaArreglos(listaArreglos, filas, columnas);
+            string cifrado = contadorSignos + leerListaArreglos(listaArreglos, filas, columnas);
             return cifrado;
         }
 
@@ -144,8 +146,27 @@ namespace Laboratorio5ED2.TipoCifrado
 
         public string DesCifrar(string cadena, int filas, int columnas)
         {
-            List<char[,]> listaReconstruida = reconstruirArreglos(cadena, filas, columnas);
+            byte[] numeros = System.Text.ASCIIEncoding.ASCII.GetBytes(cadena);
+            string cantidadSignos = "";
+            int cont = 0;
+            string cadenaOriginal = "";
+            foreach(var item in numeros)
+            {
+                if (cont != 0)
+                {
+                    cadenaOriginal += Convert.ToChar(item);
+                }
+                else
+                {
+                    cantidadSignos += Convert.ToChar(item);
+                    cont = Convert.ToInt32(cantidadSignos);
+                }
+            }
+
+            //string cadenaOriginal = cadena.Substring(1, cadena.Length - 1);
+            List<char[,]> listaReconstruida = reconstruirArreglos(cadenaOriginal, filas, columnas);
             string reconstruido = leerArregloReconstruido(listaReconstruida, filas, columnas);
+            reconstruido = reconstruido.Substring(0, reconstruido.Length - cont);
             return reconstruido;
         }
     }
