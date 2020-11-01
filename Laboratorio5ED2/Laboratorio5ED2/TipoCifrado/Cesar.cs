@@ -19,12 +19,34 @@ namespace Laboratorio5ED2.TipoCifrado
         private string EncriptUpperAbc;
         private string EncriptLowerAbc;
 
-        public Cesar()
+        public Cesar(string key)
         {
             this.UpperAbc = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
             this.LowerAbc = this.UpperAbc.ToLower();
-            this.EncriptUpperAbc = "ANDROIBCEFGHJKLMÑPQSTUVWXYZ";
+            this.EncriptUpperAbc = GenerarABCifrado(key.ToUpper());
             this.EncriptLowerAbc = this.EncriptUpperAbc.ToLower();
+        }
+        private string GenerarABCifrado(string key)
+        {
+            string auxiliar = "";
+            foreach (var item in key)
+            {
+                if (!auxiliar.Contains(item))
+                {
+                    auxiliar += item;
+                }
+            }
+            string retorno = auxiliar;
+
+            foreach (var item in this.UpperAbc)
+            {
+                if (!retorno.Contains(item))
+                {
+                    retorno += item;
+                }
+            }
+
+            return retorno;
         }
 
         public string Cifrar(string cadena) => AlgoritmoCesar(cadena, this.UpperAbc, this.EncriptUpperAbc, 
