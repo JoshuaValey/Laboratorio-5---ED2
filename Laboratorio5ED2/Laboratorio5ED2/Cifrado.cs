@@ -8,6 +8,7 @@ namespace Laboratorio5ED2
 {
     public class Cifrado
     {
+        #region CIFRADO CESAR
         public string CifradoCesar(string cadena)
         {
             Cesar cesar = new Cesar("androiD");
@@ -18,14 +19,15 @@ namespace Laboratorio5ED2
             Cesar cesar = new Cesar("Android");
             return cesar.DesCifrar(cadena);
         }
+        #endregion
 
-
+        #region CIFRADO ZIGZAG
         public void CifradoZigZag(string cadena)
         {
             //MY SPIDER SENSES ARE TINGLING
             byte[] mensaje = {77,89,32,83,80,73,68,69,82,32,83,69,78,83,69,83,32,65,82,69,32,84,73,78,71,76,73,78,71};
             ZigZag zigzag = new ZigZag(4);
-           var listado = zigzag.Cifrar2(mensaje);
+            var listado = zigzag.Cifrar2(mensaje);
             //Ver este valor
             string cadenaEncript = "";
             foreach (var item in listado)
@@ -37,14 +39,14 @@ namespace Laboratorio5ED2
 
             int flag = 1;
         }
-
         public void DesCifradoZigZag(string cadena)
         {
             ZigZag zigzag = new ZigZag(4);
             zigzag.DesCifrar(cadena);
         }
+        #endregion
 
-
+        #region CIFRADO RUTA
         public string CifradoRuta(string cadena, int fila, int columna)
         {
             Ruta ruta = new Ruta();
@@ -55,6 +57,6 @@ namespace Laboratorio5ED2
             Ruta ruta = new Ruta();
             return ruta.DesCifrar(cadena, filas, columnas);
         }
-
+        #endregion
     }
 }
