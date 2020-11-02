@@ -1,6 +1,7 @@
 ﻿using Laboratorio5ED2.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 
@@ -87,7 +88,8 @@ namespace Laboratorio5ED2.TipoCifrado
         public string Cifrar(string cadena, int filas, int columnas)
         {
             List<char[,]> listaArreglos = llenarArreglos(cadena, filas, columnas);
-            string cifrado = contadorSignos + leerListaArreglos(listaArreglos, filas, columnas);
+            int cantidadNumeros = (Convert.ToString(contadorSignos)).Length;
+            string cifrado = Convert.ToString(cantidadNumeros) + Convert.ToString(contadorSignos) + leerListaArreglos(listaArreglos, filas, columnas);
             return cifrado;
         }
 
@@ -148,18 +150,30 @@ namespace Laboratorio5ED2.TipoCifrado
         {
             byte[] numeros = System.Text.ASCIIEncoding.ASCII.GetBytes(cadena);
             string cantidadSignos = "";
+            string cantidadNumeros = "";
             int cont = 0;
+            int c = 0;
             string cadenaOriginal = "";
+
+            cantidadNumeros += Convert.ToChar(numeros[0]);
+            int cantNumeros = Convert.ToInt32(cantidadNumeros);
+
+            for(int i = 1; i <= cantNumeros; i++)
+            {
+                cantidadSignos += Convert.ToChar(numeros[i]);
+            }
+
+            cont = Convert.ToInt32(cantidadSignos);
+
             foreach(var item in numeros)
             {
-                if (cont != 0)
+                if (c >= cantNumeros+1)
                 {
                     cadenaOriginal += Convert.ToChar(item);
                 }
                 else
                 {
-                    cantidadSignos += Convert.ToChar(item);
-                    cont = Convert.ToInt32(cantidadSignos);
+                    c++; 
                 }
             }
 

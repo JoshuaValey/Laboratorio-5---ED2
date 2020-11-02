@@ -17,8 +17,8 @@ namespace PruebasCifrado
             //string mensajeCifrado = cifrado.CifradoCesar(reader.ReadToEnd());
 
             //string mensajeDesCifrado = cifrado.DesCifradoCesar(mensajeCifrado);
-            string mensajeCifrado = cifrado.CifradoRuta(reader.ReadToEnd(), 4, 3);
-            cifrado.DesCifradoRuta(mensajeCifrado, 4, 3);
+            string mensajeCifrado = cifrado.CifradoRuta(reader.ReadToEnd(), 100, 20);
+            cifrado.DesCifradoRuta(mensajeCifrado, 100, 20);
             //int flag = 1;
 
             //cifrado.CifradoZigZag("Hola");
