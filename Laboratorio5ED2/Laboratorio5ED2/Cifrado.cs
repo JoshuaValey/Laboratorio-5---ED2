@@ -10,12 +10,12 @@ namespace Laboratorio5ED2
     {
         public string CifradoCesar(string cadena)
         {
-            Cesar cesar = new Cesar();
+            Cesar cesar = new Cesar("androiD");
             return cesar.Cifrar(cadena);
         }
         public string DesCifradoCesar(string cadena)
         {
-            Cesar cesar = new Cesar();
+            Cesar cesar = new Cesar("Android");
             return cesar.DesCifrar(cadena);
         }
 
