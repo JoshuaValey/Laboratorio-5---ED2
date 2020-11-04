@@ -10,30 +10,19 @@ namespace Laboratorio5ED2.TipoCifrado
     internal class Ruta
     {
         int contadorSignos = 0;
-        private List<char[,]> llenarArreglos(string cadena, int h, int b) 
+
+        private string llenarLeer(string cadena, int h, int b)
         {
-            int cantidadCaracteres = cadena.Length;
-            int cantidadPorArreglo = h * b;
-            Decimal cantidadArreglos = Decimal.Divide(cantidadCaracteres, cantidadPorArreglo);
-            List<char[,]> listaArreglos = new List<char[,]>();
+            string cifrado = "";
             Queue<char> listaCadena = recuperarBytes(cadena);
             char aux;
 
-            if ((cantidadArreglos % 2) != 0)
-            {
-                cantidadArreglos = (cantidadCaracteres / cantidadPorArreglo) + 1;
-            }
-            else
-            {
-                cantidadArreglos = cantidadCaracteres / cantidadPorArreglo;
-            }
-
-            for(int i = 0; i < cantidadArreglos; i++)
+            while (listaCadena.Count != 0)
             {
                 char[,] nuevoArreglo = new char[b, h];
-                for(int j = 0; j < b; j++)
+                for (int j = 0; j < b; j++)
                 {
-                    for(int k = 0; k < h; k++)
+                    for (int k = 0; k < h; k++)
                     {
                         if (listaCadena.Count != 0)
                         {
@@ -47,9 +36,16 @@ namespace Laboratorio5ED2.TipoCifrado
                         }
                     }
                 }
-                listaArreglos.Add(nuevoArreglo);
+
+                for (int j = 0; j < h; j++)
+                {
+                    for (int k = 0; k < b; k++)
+                    {
+                        cifrado += nuevoArreglo[k, j];
+                    }
+                }
             }
-            return listaArreglos;
+            return cifrado;
         }
 
         private Queue<char> recuperarBytes(string cadena)
@@ -62,88 +58,55 @@ namespace Laboratorio5ED2.TipoCifrado
             return listaBytes;
         }
 
-        private string leerListaArreglos(List<char[,]> lista, int b, int h)
-        {
-            string cifrado = "";
-            int contador = 0;
-            int fila = 0;
-
-            while (contador <= b-1)
-            {
-                for(int i = 0; i < lista.Count; i++)
-                {
-                    char[,] nuevoArreglo = lista[i];
-                    for(int j = 0; j < h; j++)
-                    {
-                        cifrado += nuevoArreglo[j, fila];
-                    }
-                }
-                fila++;
-                contador++;
-            }
-            
-            return cifrado;
-        }
-
         public string Cifrar(string cadena, int filas, int columnas)
         {
-            List<char[,]> listaArreglos = llenarArreglos(cadena, filas, columnas);
+            string cifrado = llenarLeer(cadena, filas, columnas);
             int cantidadNumeros = (Convert.ToString(contadorSignos)).Length;
-            string cifrado = Convert.ToString(cantidadNumeros) + Convert.ToString(contadorSignos) + leerListaArreglos(listaArreglos, filas, columnas);
+            cifrado = Convert.ToString(cantidadNumeros) + Convert.ToString(contadorSignos) + cifrado;
             return cifrado;
         }
 
-        private List<char[,]> reconstruirArreglos(string cifrado, int filas, int columnas)
+        public string reconstruirLeer(string cifrado, int filas, int columnas)
         {
+            string recuperado = "";
             Queue<char> listaBytes = recuperarBytes(cifrado);
-            List<char[,]> listaArreglos = new List<char[,]>();
-            int cantidadCaracteres = cifrado.Length;
-            int cantidadPorArreglo = columnas * filas;
-            int contador = 0;
-            int fila = 0;
-            int cantidadArreglos = cantidadCaracteres/cantidadPorArreglo;
 
-            for(int i = 0; i < cantidadArreglos; i++)
+            while (listaBytes.Count != 0)
             {
-                char[,] nuevoArreglo = new char[columnas, filas];
-                listaArreglos.Add(nuevoArreglo);
-            }
-
-            while (contador <= filas - 1)
-            {
-                for (int i = 0; i < listaArreglos.Count; i++)
+                char[,] nuevoArreglo = new char[filas, columnas];
+                for (int i = 0; i < filas; i++)
                 {
-                    char[,] nuevoArreglo = listaArreglos[i];
                     for (int j = 0; j < columnas; j++)
                     {
-                        nuevoArreglo[j, fila] = listaBytes.Dequeue();
+                        if (listaBytes.Count != 0)
+                        {
+                            nuevoArreglo[i, j] = listaBytes.Dequeue();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        
                     }
                 }
-                fila++;
-                contador++;
-            }
 
-            return listaArreglos;
-        }
-
-        private string leerArregloReconstruido(List<char[,]> lista, int filas, int columnas)
-        {
-            string reconstruido = "";
-            int contador = 0;
-
-            while (contador < lista.Count)
-            {
-                char[,] nuevoArreglo = lista[contador];
                 for(int i = 0; i < columnas; i++)
                 {
                     for(int j = 0; j < filas; j++)
                     {
-                        reconstruido += nuevoArreglo[i, j];
+                        if (Convert.ToChar(nuevoArreglo[j, i]) != 0) 
+                        {
+                            recuperado += nuevoArreglo[j, i];
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
-                contador++;
             }
-            return reconstruido;
+
+            return recuperado;
         }
 
         public string DesCifrar(string cadena, int filas, int columnas)
@@ -177,9 +140,7 @@ namespace Laboratorio5ED2.TipoCifrado
                 }
             }
 
-            //string cadenaOriginal = cadena.Substring(1, cadena.Length - 1);
-            List<char[,]> listaReconstruida = reconstruirArreglos(cadenaOriginal, filas, columnas);
-            string reconstruido = leerArregloReconstruido(listaReconstruida, filas, columnas);
+            string reconstruido = reconstruirLeer(cadenaOriginal, filas, columnas);
             reconstruido = reconstruido.Substring(0, reconstruido.Length - cont);
             return reconstruido;
         }
