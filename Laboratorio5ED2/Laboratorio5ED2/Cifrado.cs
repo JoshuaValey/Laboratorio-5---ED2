@@ -22,16 +22,14 @@ namespace Laboratorio5ED2
         #endregion
 
         #region CIFRADO ZIGZAG
-        public string CifradoZigZag(string cadena, string llave)
+        public string CifradoZigZag(string cadena, int llave)
         {
-            int lvl = Convert.ToInt32(llave);
-            ZigZag zigzag = new ZigZag(lvl);
+            ZigZag zigzag = new ZigZag(llave);
             return zigzag.Cifrar(cadena);
         }
-        public string DesCifradoZigZag(string cadena, string llave)
+        public string DesCifradoZigZag(string cadena, int llave)
         {
-            int lvl = Convert.ToInt32(llave);
-            ZigZag zigzag = new ZigZag(lvl);
+            ZigZag zigzag = new ZigZag(llave);
             return zigzag.DesCifrar(cadena);
         }
         #endregion

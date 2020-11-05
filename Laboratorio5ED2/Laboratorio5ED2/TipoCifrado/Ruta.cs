@@ -121,7 +121,7 @@ namespace Laboratorio5ED2.TipoCifrado
             cantidadNumeros += Convert.ToChar(numeros[0]);
             int cantNumeros = Convert.ToInt32(cantidadNumeros);
 
-            for(int i = 1; i <= cantNumeros; i++)
+            for (int i = 1; i <= cantNumeros; i++)
             {
                 cantidadSignos += Convert.ToChar(numeros[i]);
             }

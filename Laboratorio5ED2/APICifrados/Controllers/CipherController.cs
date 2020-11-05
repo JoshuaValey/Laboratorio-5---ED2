@@ -21,7 +21,8 @@ namespace APICifrados.Controllers
             Cifrado cipher = new Cifrado();
             string terminacion;
             method = method.ToLower();
-            string nombre = $"./{method}";
+            string[] separado = (file.FileName).Split('.');
+            string nombre = $"./" + separado[0];
             string fileType = "text/plain";
             var texto = new StringBuilder();
             using (var reader = new StreamReader(file.OpenReadStream()))
@@ -43,9 +44,9 @@ namespace APICifrados.Controllers
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;
                 }
-                /*else if (method == "zigzag")
+                else if (method == "zigzag")
                 {
-                    string textoCifrado = cipher.CifradoZigZag(texto.ToString());
+                    string textoCifrado = cipher.CifradoZigZag(texto.ToString(), key.level);
                     terminacion = ".zz";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -53,7 +54,7 @@ namespace APICifrados.Controllers
                     documento.WriteLine(textoCifrado);
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;
-                }*/
+                }
                 else if (method == "ruta")
                 {
                     string textoCifrado = cipher.CifradoRuta(texto.ToString(), key.rows, key.columns);
@@ -65,10 +66,60 @@ namespace APICifrados.Controllers
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;
                 }
-                else
+                return StatusCode(200);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("decipher")]
+        public async Task<IActionResult> Decipher([FromForm] IFormFile file, [FromForm] Key key)
+        {
+            Cifrado decipher = new Cifrado();
+            string[] separado = (file.FileName).Split('.');
+            string terminacion = separado[1];
+            string descifrado = "";
+            string nombre = $"./"+separado[0]+".txt";
+            string fileType = "text/plain";
+            var texto = new StringBuilder();
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            {
+                while (reader.Peek() >= 0)
+                    texto.AppendLine(await reader.ReadLineAsync());
+            }
+
+            try
+            {
+                if (terminacion == "csr")
                 {
-                    return StatusCode(500);
+                    descifrado = decipher.DesCifradoCesar(texto.ToString(), key.word);
+                    FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamWriter documento = new StreamWriter(filestream);
+                    documento.WriteLine(descifrado);
+                    var fileResult = File(filestream, fileType, nombre);
+                    return fileResult;
                 }
+                else if(terminacion == "zz")
+                {
+                    descifrado = decipher.DesCifradoZigZag(texto.ToString(), key.level);
+                    FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamWriter documento = new StreamWriter(filestream);
+                    documento.WriteLine(descifrado);
+                    var fileResult = File(filestream, fileType, nombre);
+                    return fileResult;
+                }
+                else if(terminacion == "rt")
+                {
+                    descifrado = decipher.DesCifradoRuta(texto.ToString(), key.rows, key.columns);
+                    FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamWriter documento = new StreamWriter(filestream);
+                    documento.WriteLine(descifrado);
+                    var fileResult = File(filestream, fileType, nombre);
+                    return fileResult;
+                }
+                return StatusCode(200);
             }
             catch
             {
