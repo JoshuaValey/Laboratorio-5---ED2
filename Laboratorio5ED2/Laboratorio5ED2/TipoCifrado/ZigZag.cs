@@ -11,11 +11,11 @@ namespace Laboratorio5ED2.TipoCifrado
     internal class ZigZag : ICifrado
     {
 
-        private byte numNivel;
+        private int numNivel;
         private int valoresEnOla;
         private char padCharacter = '▄'; // ▄
 
-        public ZigZag(byte cantidadNiveles)
+        public ZigZag(int cantidadNiveles)
         {
             this.numNivel = cantidadNiveles;
             this.valoresEnOla = numNivel * 2 - 2;

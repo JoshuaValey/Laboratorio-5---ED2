@@ -14,22 +14,24 @@ namespace Laboratorio5ED2
             Cesar cesar = new Cesar(llave);
             return cesar.Cifrar(cadena);
         }
-        public string DesCifradoCesar(string cadena)
+        public string DesCifradoCesar(string cadena, string llave)
         {
-            Cesar cesar = new Cesar("Android");
+            Cesar cesar = new Cesar(llave);
             return cesar.DesCifrar(cadena);
         }
         #endregion
 
         #region CIFRADO ZIGZAG
-        public string CifradoZigZag(string cadena)
+        public string CifradoZigZag(string cadena, string llave)
         {
-            ZigZag zigzag = new ZigZag(4);
+            int lvl = Convert.ToInt32(llave);
+            ZigZag zigzag = new ZigZag(lvl);
             return zigzag.Cifrar(cadena);
         }
-        public string DesCifradoZigZag(string cadena)
+        public string DesCifradoZigZag(string cadena, string llave)
         {
-            ZigZag zigzag = new ZigZag(4);
+            int lvl = Convert.ToInt32(llave);
+            ZigZag zigzag = new ZigZag(lvl);
             return zigzag.DesCifrar(cadena);
         }
         #endregion
