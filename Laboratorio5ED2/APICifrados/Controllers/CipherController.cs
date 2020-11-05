@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using APICifrados.Models;
 using Laboratorio5ED2;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace APICifrados.Controllers
     public class CipherController : Controller
     {
         [HttpPost("cipher/{method}")]
-        public async Task<IActionResult> Cipher([FromForm] IFormFile file, string method)
+        public async Task<IActionResult> Cipher([FromForm] IFormFile file, string method, [FromForm] Key key)
         {
             Cifrado cipher = new Cifrado();
             string terminacion;
@@ -33,7 +34,7 @@ namespace APICifrados.Controllers
             {
                 if (method == "cesar")
                 {
-                    string textoCifrado = cipher.CifradoCesar(texto.ToString());
+                    string textoCifrado = cipher.CifradoCesar(texto.ToString(), key.word);
                     terminacion = ".csr";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -42,7 +43,7 @@ namespace APICifrados.Controllers
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;
                 }
-                else if (method == "zigzag")
+                /*else if (method == "zigzag")
                 {
                     string textoCifrado = cipher.CifradoZigZag(texto.ToString());
                     terminacion = ".zz";
@@ -52,11 +53,11 @@ namespace APICifrados.Controllers
                     documento.WriteLine(textoCifrado);
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;
-                }
+                }*/
                 else if (method == "ruta")
                 {
-                    string textoCifrado = cipher.CifradoRuta(texto.ToString(), 3, 4);
-                    terminacion = "rt";
+                    string textoCifrado = cipher.CifradoRuta(texto.ToString(), key.rows, key.columns);
+                    terminacion = ".rt";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);

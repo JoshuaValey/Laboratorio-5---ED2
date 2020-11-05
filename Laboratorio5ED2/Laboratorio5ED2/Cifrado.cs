@@ -9,9 +9,9 @@ namespace Laboratorio5ED2
     public class Cifrado
     {
         #region CIFRADO CESAR
-        public string CifradoCesar(string cadena)
+        public string CifradoCesar(string cadena, string llave)
         {
-            Cesar cesar = new Cesar("androiD");
+            Cesar cesar = new Cesar(llave);
             return cesar.Cifrar(cadena);
         }
         public string DesCifradoCesar(string cadena)
