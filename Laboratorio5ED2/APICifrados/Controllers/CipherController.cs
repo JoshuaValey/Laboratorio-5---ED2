@@ -25,24 +25,28 @@ namespace APICifrados.Controllers
             string nombre = $"./" + separado[0];
             string fileType = "text/plain";
             var texto = new StringBuilder();
-            using (var reader = new StreamReader(file.OpenReadStream()))
+           using (var reader = new StreamReader(file.OpenReadStream()))
             {
                 while (reader.Peek() >= 0)
                     texto.AppendLine(await reader.ReadLineAsync());
+
+                reader.Close();
             }
 
             try
             {
                 if (method == "cesar")
                 {
-                    string textoCifrado = cipher.CifradoCesar(texto.ToString(), key.word);
-                    terminacion = ".csr";
+                   // string textoCifrado = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()));
+                  var fileStream = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()),  nombre);
+                    /*terminacion = ".csr";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(textoCifrado);
                     var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    filestream.Close();*/
+                    return File(fileStream, fileType, nombre);
                 }
                 else if (method == "zigzag")
                 {
@@ -88,18 +92,23 @@ namespace APICifrados.Controllers
             {
                 while (reader.Peek() >= 0)
                     texto.AppendLine(await reader.ReadLineAsync());
+
+                reader.Close();
             }
 
             try
             {
                 if (terminacion == "csr")
                 {
-                    descifrado = decipher.DesCifradoCesar(texto.ToString(), key.word);
+                    var fileStream = decipher.DesCifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()), nombre);
+                    /*descifrado = decipher.DesCifradoCesar(texto.ToString(), key.word);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);
                     var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    //filestream.Close();
+                    return fileResult;*/
+                    return File(fileStream, fileType, nombre);
                 }
                 else if(terminacion == "zz")
                 {
