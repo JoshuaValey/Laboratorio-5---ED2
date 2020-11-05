@@ -22,27 +22,15 @@ namespace Laboratorio5ED2
         #endregion
 
         #region CIFRADO ZIGZAG
-        public void CifradoZigZag(string cadena)
+        public string CifradoZigZag(string cadena)
         {
-            //MY SPIDER SENSES ARE TINGLING
-            byte[] mensaje = {77,89,32,83,80,73,68,69,82,32,83,69,78,83,69,83,32,65,82,69,32,84,73,78,71,76,73,78,71};
             ZigZag zigzag = new ZigZag(4);
-            var listado = zigzag.Cifrar2(mensaje);
-            //Ver este valor
-            string cadenaEncript = "";
-            foreach (var item in listado)
-            {
-                cadenaEncript += Convert.ToChar(item);
-            }
-            //////////////////////
-            zigzag.DesCifrar2(listado);
-
-            int flag = 1;
+            return zigzag.Cifrar(cadena);
         }
-        public void DesCifradoZigZag(string cadena)
+        public string DesCifradoZigZag(string cadena)
         {
             ZigZag zigzag = new ZigZag(4);
-            zigzag.DesCifrar(cadena);
+            return zigzag.DesCifrar(cadena);
         }
         #endregion
 
