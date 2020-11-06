@@ -18,24 +18,28 @@ namespace APICifrados.Controllers
         [HttpPost("cipher/{method}")]
         public async Task<IActionResult> Cipher([FromForm] IFormFile file, string method, [FromForm] Key key)
         {
+            string path = @".\Archivos";
             Cifrado cipher = new Cifrado();
             string terminacion;
             method = method.ToLower();
             string[] separado = (file.FileName).Split('.');
             string nombre = $"./" + separado[0];
             string fileType = "text/plain";
-            var texto = new StringBuilder();
-            using (var reader = new StreamReader(file.OpenReadStream()))
+
+            using (var filestream = new FileStream((path + file.FileName), FileMode.Create))
             {
-                while (reader.Peek() >= 0)
-                    texto.AppendLine(await reader.ReadLineAsync());
+                await file.CopyToAsync(filestream);
             }
+
+            string pathFile = @".\Archivos" + file.FileName;
+            FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
+            string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
 
             try
             {
                 if (method == "cesar")
                 {
-                    string textoCifrado = cipher.CifradoCesar(texto.ToString(), key.word);
+                    string textoCifrado = cipher.CifradoCesar(linea, key.word);
                     terminacion = ".csr";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -46,7 +50,7 @@ namespace APICifrados.Controllers
                 }
                 else if (method == "zigzag")
                 {
-                    string textoCifrado = cipher.CifradoZigZag(texto.ToString(), key.level);
+                    string textoCifrado = cipher.CifradoZigZag(linea, key.level);
                     terminacion = ".zz";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -57,12 +61,12 @@ namespace APICifrados.Controllers
                 }
                 else if (method == "ruta")
                 {
-                    string textoCifrado = cipher.CifradoRuta(texto.ToString(), key.rows, key.columns);
+                    string textoCifrado = cipher.CifradoRuta(linea, key.rows, key.columns);
                     terminacion = ".rt";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
-                    documento.WriteLine(textoCifrado);
+                    documento.Write(textoCifrado);
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;
                 }
@@ -77,24 +81,28 @@ namespace APICifrados.Controllers
         [HttpPost("decipher")]
         public async Task<IActionResult> Decipher([FromForm] IFormFile file, [FromForm] Key key)
         {
+            string path = @".\Archivos";
             Cifrado decipher = new Cifrado();
             string[] separado = (file.FileName).Split('.');
             string terminacion = separado[1];
             string descifrado = "";
             string nombre = $"./"+separado[0]+".txt";
             string fileType = "text/plain";
-            var texto = new StringBuilder();
-            using (var reader = new StreamReader(file.OpenReadStream()))
+
+            using (var filestream = new FileStream((path + file.FileName), FileMode.Create))
             {
-                while (reader.Peek() >= 0)
-                    texto.AppendLine(await reader.ReadLineAsync());
+                await file.CopyToAsync(filestream);
             }
+
+            string pathFile = @".\Archivos" + file.FileName;
+            FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
+            string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
 
             try
             {
                 if (terminacion == "csr")
                 {
-                    descifrado = decipher.DesCifradoCesar(texto.ToString(), key.word);
+                    descifrado = decipher.DesCifradoCesar(linea, key.word);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);
@@ -103,7 +111,7 @@ namespace APICifrados.Controllers
                 }
                 else if(terminacion == "zz")
                 {
-                    descifrado = decipher.DesCifradoZigZag(texto.ToString(), key.level);
+                    descifrado = decipher.DesCifradoZigZag(linea, key.level);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);
@@ -112,10 +120,10 @@ namespace APICifrados.Controllers
                 }
                 else if(terminacion == "rt")
                 {
-                    descifrado = decipher.DesCifradoRuta(texto.ToString(), key.rows, key.columns);
+                    descifrado = decipher.DesCifradoRuta(linea, key.rows, key.columns);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
-                    documento.WriteLine(descifrado);
+                    documento.Write(descifrado);
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;
                 }

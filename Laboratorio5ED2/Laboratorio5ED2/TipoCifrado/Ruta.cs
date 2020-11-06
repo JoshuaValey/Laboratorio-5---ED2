@@ -9,9 +9,9 @@ namespace Laboratorio5ED2.TipoCifrado
 {
     internal class Ruta
     {
-        int contadorSignos = 0;
+        public int contadorSignos = 0;
 
-        private string llenarLeer(string cadena, int h, int b)
+        public string llenarLeer(string cadena, int h, int b)
         {
             string cifrado = "";
             Queue<char> listaCadena = recuperarBytes(cadena);
