@@ -51,28 +51,18 @@ namespace APICifrados.Controllers
                 if (method == "cesar")
                 {
                     terminacion = ".csr";
-                    var fileStream = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()),  nombre);
+                    var fileStream = cipher.CifradoCesar(key.word, new StreamReader(file.OpenReadStream()),  nombre);
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     return File(filestream, fileType, nombre);
                 }
                 else if (method == "zigzag")
                 {
-                    /*FileStream filestream2 = new FileStream(pathFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    StreamReader reader = new StreamReader(filestream2);
-                    terminacion = ".zz";
-                    //var fileStream = cipher.CifradoZigZag(texto.ToString(), key.level, new StreamReader(file.OpenReadStream()), nombre);
-                    nombre += terminacion;
-                    var textoCifrado = cipher.CifradoZigZag(linea, key.level, reader, nombre);
-                    FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    //StreamWriter documento = new StreamWriter(filestream);
-                    //documento.WriteLine(textoCifrado);
-                    //documento.Close();
-                    return File(filestream, fileType, nombre);*/
+                    
                     FileStream filestream3 = new FileStream(pathFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamReader reader = new StreamReader(filestream3);
-                    string textoCifrado = cipher.CifradoZigZag(linea, key.level, reader, nombre);
-                    System.IO.File.Delete(pathFile);
+                    string textoCifrado = cipher.CifradoZigZag(linea, key.level);
+                   // System.IO.File.Delete(pathFile);
                     terminacion = ".zz";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -140,24 +130,21 @@ namespace APICifrados.Controllers
             {
                 if (terminacion == "csr")
                 {
-                    var fileStream = decipher.DesCifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()), nombre);
+                    var fileStream = decipher.DesCifradoCesar(key.word, new StreamReader(file.OpenReadStream()), nombre);
                     FileStream stream = new FileStream(nombre, FileMode.Open, FileAccess.Read);
                     return File(stream, fileType, nombre);
                 }
                 else if(terminacion == "zz")
                 {
-                    /*descifrado = decipher.DesCifradoZigZag(linea, key.level);
+                    descifrado = decipher.DesCifradoZigZag(linea, key.level);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);
                     documento.Close();
-                    var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;*/
-                    FileStream filestream2 = new FileStream(pathFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    StreamReader reader = new StreamReader(filestream2);
-                    var fileStream = decipher.DesCifradoZigZag(linea, key.level, reader, nombre);
-                    FileStream stream = new FileStream(nombre, FileMode.Open, FileAccess.Read);
-                    return File(stream, fileType, nombre);
+                    FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    var fileResult = File(filestream2, fileType, nombre);
+                    return fileResult;
+                  
                 }
                 else if(terminacion == "rt")
                 {
