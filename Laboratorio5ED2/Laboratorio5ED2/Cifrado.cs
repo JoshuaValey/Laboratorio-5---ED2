@@ -16,7 +16,6 @@ namespace Laboratorio5ED2
             Cesar cesar = new Cesar(llave);
             FileStream filestream = new FileStream(nombre + ".csr", FileMode.OpenOrCreate, FileAccess.Write);
             StreamWriter documento = new StreamWriter(filestream);
-            //documento.WriteLine(textoCifrado);
             string fila = "";
             while (file.Peek() > -1)
             {
@@ -38,7 +37,6 @@ namespace Laboratorio5ED2
             Cesar cesar = new Cesar(llave);
             FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.Write);
             StreamWriter documento = new StreamWriter(filestream);
-            //documento.WriteLine(textoCifrado);
             string fila = "";
             while (file.Peek() > -1)
             {
@@ -49,22 +47,55 @@ namespace Laboratorio5ED2
                     documento.WriteLine(lineaCifrada);
                 }
             }
-            //documento.Close();
-            //file.Close();
+            documento.Close();
+            file.Close();
             return filestream;
         }
         #endregion
 
         #region CIFRADO ZIGZAG
-        public string CifradoZigZag(string cadena, int llave)
+        public FileStream CifradoZigZag(string cadena, int llave, StreamReader file, string nombre)
         {
             ZigZag zigzag = new ZigZag(llave);
-            return zigzag.Cifrar(cadena);
+            FileStream filestream = new FileStream(nombre + ".zz", FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter documento = new StreamWriter(filestream);
+            string fila = "";
+            while (file.Peek() > -1)
+            {
+                string linea = file.ReadLine();
+                string lineaCifrada = zigzag.Cifrar(linea);
+                if (!String.IsNullOrEmpty(linea))
+                {
+                    documento.WriteLine(lineaCifrada);
+                }
+               
+            }
+            documento.Close();
+            file.Close();
+            fila = "";
+            return filestream;
+            //return zigzag.Cifrar(cadena);
         }
-        public string DesCifradoZigZag(string cadena, int llave)
+        public FileStream DesCifradoZigZag(string cadena, int llave, StreamReader file, string nombre)
         {
             ZigZag zigzag = new ZigZag(llave);
-            return zigzag.DesCifrar(cadena);
+            FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter documento = new StreamWriter(filestream);
+            string fila = "";
+            while (file.Peek() > -1)
+            {
+                string linea = file.ReadLine();
+                string lineaCifrada = zigzag.DesCifrar(linea);
+                if (!String.IsNullOrEmpty(linea))
+                {
+                    documento.WriteLine(lineaCifrada);
+                }
+                
+            }
+            documento.Close();
+            file.Close();
+            fila = "";
+            return filestream;
         }
         #endregion
 
