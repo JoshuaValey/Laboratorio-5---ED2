@@ -58,11 +58,8 @@ namespace APICifrados.Controllers
                 }
                 else if (method == "zigzag")
                 {
-                    
-                    FileStream filestream3 = new FileStream(pathFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    StreamReader reader = new StreamReader(filestream3);
                     string textoCifrado = cipher.CifradoZigZag(linea, key.level);
-                   // System.IO.File.Delete(pathFile);
+                    System.IO.File.Delete(pathFile);
                     terminacion = ".zz";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);

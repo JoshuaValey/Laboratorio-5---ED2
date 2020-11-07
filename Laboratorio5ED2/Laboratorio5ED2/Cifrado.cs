@@ -61,9 +61,6 @@ namespace Laboratorio5ED2
         public string DesCifradoZigZag(string cadena, int llave)
         {
             ZigZag zigzag = new ZigZag(llave);
-     
-            file.Close();
-          
             return zigzag.DesCifrar(cadena);
         }
         #endregion
