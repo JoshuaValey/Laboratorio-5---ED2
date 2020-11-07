@@ -52,8 +52,8 @@ namespace APICifrados.Controllers
                     var fileStream = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()),  nombre);
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    StreamWriter documento = new StreamWriter(filestream);
-                    return File(fileStream, fileType, nombre);
+                    //StreamWriter documento = new StreamWriter(filestream);
+                    return File(filestream, fileType, nombre);
                 }
                 else if (method == "zigzag")
                 {
