@@ -52,7 +52,6 @@ namespace APICifrados.Controllers
                     var fileStream = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()),  nombre);
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    //StreamWriter documento = new StreamWriter(filestream);
                     return File(filestream, fileType, nombre);
                 }
                 else if (method == "zigzag")
@@ -69,6 +68,7 @@ namespace APICifrados.Controllers
                 else if (method == "ruta")
                 {
                     string textoCifrado = cipher.CifradoRuta(linea, key.rows, key.columns, fileS);
+                    System.IO.File.Delete(pathFile);
                     terminacion = ".rt";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -121,7 +121,8 @@ namespace APICifrados.Controllers
                 if (terminacion == "csr")
                 {
                     var fileStream = decipher.DesCifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()), nombre);
-                    return File(fileStream, fileType, nombre);
+                    FileStream stream = new FileStream(nombre, FileMode.Open, FileAccess.Read);
+                    return File(stream, fileType, nombre);
                 }
                 else if(terminacion == "zz")
                 {
