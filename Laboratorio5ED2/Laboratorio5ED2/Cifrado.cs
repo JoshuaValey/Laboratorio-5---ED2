@@ -27,8 +27,8 @@ namespace Laboratorio5ED2
                     documento.WriteLine(lineaCifrada);
                 }
             }
-            //documento.Close();
-            //file.Close();
+            documento.Close();
+            file.Close();
             fila = "";
             return filestream;
             //return cesar.Cifrar(cadena);

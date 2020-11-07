@@ -52,8 +52,8 @@ namespace APICifrados.Controllers
                     var fileStream = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()),  nombre);
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    StreamWriter documento = new StreamWriter(filestream);
-                    return File(fileStream, fileType, nombre);
+                    //StreamWriter documento = new StreamWriter(filestream);
+                    return File(filestream, fileType, nombre);
                 }
                 else if (method == "zigzag")
                 {
@@ -101,13 +101,16 @@ namespace APICifrados.Controllers
                 await file.CopyToAsync(filestream);
             }
 
-            /*var texto = new StringBuilder();
+            var texto = new StringBuilder();
             using (var reader = new StreamReader(file.OpenReadStream()))
-            while (reader.Peek() >= 0)
             {
-                 texto.AppendLine(await reader.ReadLineAsync());
-                 reader.Close();
-            }*/
+                while (reader.Peek() >= 0)
+                {
+                    texto.AppendLine(await reader.ReadLineAsync());
+                    
+                }
+                reader.Close();
+            }
 
             string pathFile = @".\Archivos\" + file.FileName;
             FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
@@ -115,12 +118,12 @@ namespace APICifrados.Controllers
 
             try
             {
-                /*if (terminacion == "csr")
+                if (terminacion == "csr")
                 {
                     var fileStream = decipher.DesCifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()), nombre);
                     return File(fileStream, fileType, nombre);
-                }*/
-                if(terminacion == "zz")
+                }
+                else if(terminacion == "zz")
                 {
                     descifrado = decipher.DesCifradoZigZag(linea, key.level);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
