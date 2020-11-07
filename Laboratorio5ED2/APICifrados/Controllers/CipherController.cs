@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using APICifrados.Models;
 using Laboratorio5ED2;
@@ -42,6 +43,7 @@ namespace APICifrados.Controllers
 
             string pathFile = @".\Archivos\" + file.FileName;
             FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
+            fileS.Close();
             string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
 
             try
@@ -62,22 +64,22 @@ namespace APICifrados.Controllers
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(textoCifrado);
-                    var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    documento.Close();
                 }
                 else if (method == "ruta")
                 {
-                    string textoCifrado = cipher.CifradoRuta(linea, key.rows, key.columns, fileS);
+                    string textoCifrado = cipher.CifradoRuta(linea, key.rows, key.columns);
                     System.IO.File.Delete(pathFile);
                     terminacion = ".rt";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
-                    documento.Write(textoCifrado);
-                    var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    documento.WriteLine(textoCifrado);
+                    documento.Close();
                 }
-                return StatusCode(200);
+                FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                StreamWriter documento2 = new StreamWriter(filestream2);
+                return File(filestream2, fileType, nombre);
             }
             catch
             {
@@ -113,8 +115,8 @@ namespace APICifrados.Controllers
             }
 
             string pathFile = @".\Archivos\" + file.FileName;
-            FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
-            string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
+            FileStream fileS = new FileStream((path + file.FileName), FileMode.Open, FileAccess.Read);
+            string linea = System.IO.File.ReadAllText((path + file.FileName), System.Text.Encoding.Default);
 
             try
             {
@@ -130,19 +132,19 @@ namespace APICifrados.Controllers
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);
-                    var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    documento.Close();
                 }
                 else if(terminacion == "rt")
                 {
-                    descifrado = decipher.DesCifradoRuta(linea, key.rows, key.columns, fileS);
+                    descifrado = decipher.DesCifradoRuta(linea, key.rows, key.columns);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
-                    documento.Write(descifrado);
-                    var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    documento.WriteLine(descifrado);
+                    documento.Close();
                 }
-                return StatusCode(200);
+                FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                StreamWriter documento2 = new StreamWriter(filestream2);
+                return File(filestream2, fileType, nombre);
             }
             catch
             {

@@ -139,7 +139,7 @@ namespace Laboratorio5ED2.TipoCifrado
                     c++; 
                 }
             }
-
+            cont = cont + 2;
             string reconstruido = reconstruirLeer(cadenaOriginal, filas, columnas);
             reconstruido = reconstruido.Substring(0, reconstruido.Length - cont);
             return reconstruido;
