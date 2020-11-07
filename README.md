@@ -7,3 +7,5 @@
 
 * Por la forma de implementación de los algoritmos de cifrado, únicamente el cifrado Cesar usa un buffer. 
 * Los cifrados ZigZag y Ruta tardan un poco más que Cesar.
+* Carpeta Archivos no se agrega a APICifrado, si al clonar no está agregada, es necesario agregarla. 
+
