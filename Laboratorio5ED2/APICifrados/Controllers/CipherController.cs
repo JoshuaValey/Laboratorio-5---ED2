@@ -18,7 +18,7 @@ namespace APICifrados.Controllers
         [HttpPost("cipher/{method}")]
         public async Task<IActionResult> Cipher([FromForm] IFormFile file, string method, [FromForm] Key key)
         {
-            string path = @".\Archivos";
+            string path = @".\Archivos\";
             Cifrado cipher = new Cifrado();
             string terminacion;
             method = method.ToLower();
@@ -40,7 +40,7 @@ namespace APICifrados.Controllers
                 reader.Close();
             }
 
-            string pathFile = @".\Archivos" + file.FileName;
+            string pathFile = @".\Archivos\" + file.FileName;
             FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
             string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
 
@@ -52,7 +52,6 @@ namespace APICifrados.Controllers
                     var fileStream = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()),  nombre);
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    //StreamWriter documento = new StreamWriter(filestream);
                     return File(filestream, fileType, nombre);
                 }
                 else if (method == "zigzag")
@@ -68,7 +67,8 @@ namespace APICifrados.Controllers
                 }
                 else if (method == "ruta")
                 {
-                    string textoCifrado = cipher.CifradoRuta(linea, key.rows, key.columns);
+                    string textoCifrado = cipher.CifradoRuta(linea, key.rows, key.columns, fileS);
+                    System.IO.File.Delete(pathFile);
                     terminacion = ".rt";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -88,7 +88,7 @@ namespace APICifrados.Controllers
         [HttpPost("decipher")]
         public async Task<IActionResult> Decipher([FromForm] IFormFile file, [FromForm] Key key)
         {
-            string path = @".\Archivos";
+            string path = @".\Archivos\";
             Cifrado decipher = new Cifrado();
             string[] separado = (file.FileName).Split('.');
             string terminacion = separado[1];
@@ -112,7 +112,7 @@ namespace APICifrados.Controllers
                 reader.Close();
             }
 
-            string pathFile = @".\Archivos" + file.FileName;
+            string pathFile = @".\Archivos\" + file.FileName;
             FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
             string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
 
@@ -121,7 +121,8 @@ namespace APICifrados.Controllers
                 if (terminacion == "csr")
                 {
                     var fileStream = decipher.DesCifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()), nombre);
-                    return File(fileStream, fileType, nombre);
+                    FileStream stream = new FileStream(nombre, FileMode.Open, FileAccess.Read);
+                    return File(stream, fileType, nombre);
                 }
                 else if(terminacion == "zz")
                 {
@@ -134,7 +135,7 @@ namespace APICifrados.Controllers
                 }
                 else if(terminacion == "rt")
                 {
-                    descifrado = decipher.DesCifradoRuta(linea, key.rows, key.columns);
+                    descifrado = decipher.DesCifradoRuta(linea, key.rows, key.columns, fileS);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.Write(descifrado);
