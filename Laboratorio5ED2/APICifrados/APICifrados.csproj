@@ -8,5 +8,9 @@
     <ProjectReference Include="..\Laboratorio5ED2\Laboratorio5ED2.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Archivos\" />
+  </ItemGroup>
+
 
 </Project>
