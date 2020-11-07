@@ -141,7 +141,6 @@ namespace APICifrados.Controllers
                     FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     var fileResult = File(filestream2, fileType, nombre);
                     return fileResult;
-                  
                 }
                 else if(terminacion == "rt")
                 {
