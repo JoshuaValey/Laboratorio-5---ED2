@@ -58,13 +58,14 @@ namespace APICifrados.Controllers
                 }
                 else if (method == "zigzag")
                 {
-                    string textoCifrado = cipher.CifradoZigZag(linea, key.level);
                     terminacion = ".zz";
+                    var fileStream = cipher.CifradoZigZag(texto.ToString(), key.level, new StreamReader(file.OpenReadStream()), nombre);
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
-                    documento.WriteLine(textoCifrado);
-                    documento.Close();
+                    //documento.WriteLine(textoCifrado);
+                    //documento.Close();
+                    return File(filestream, fileType, nombre);
                 }
                 else if (method == "ruta")
                 {
@@ -76,10 +77,11 @@ namespace APICifrados.Controllers
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(textoCifrado);
                     documento.Close();
+                    FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamWriter documento2 = new StreamWriter(filestream2);
+                    return File(filestream2, fileType, nombre);
                 }
-                FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                StreamWriter documento2 = new StreamWriter(filestream2);
-                return File(filestream2, fileType, nombre);
+                return StatusCode(200);
             }
             catch
             {
@@ -128,11 +130,16 @@ namespace APICifrados.Controllers
                 }
                 else if(terminacion == "zz")
                 {
-                    descifrado = decipher.DesCifradoZigZag(linea, key.level);
+                    /*descifrado = decipher.DesCifradoZigZag(linea, key.level);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);
                     documento.Close();
+                    var fileResult = File(filestream, fileType, nombre);
+                    return fileResult;*/
+                    var fileStream = decipher.DesCifradoZigZag(texto.ToString(), key.level, new StreamReader(file.OpenReadStream()), nombre);
+                    FileStream stream = new FileStream(nombre, FileMode.Open, FileAccess.Read);
+                    return File(stream, fileType, nombre);
                 }
                 else if(terminacion == "rt")
                 {
@@ -141,10 +148,11 @@ namespace APICifrados.Controllers
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);
                     documento.Close();
+                    FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamWriter documento2 = new StreamWriter(filestream2);
+                    return File(filestream2, fileType, nombre);
                 }
-                FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                StreamWriter documento2 = new StreamWriter(filestream2);
-                return File(filestream2, fileType, nombre);
+                return StatusCode(200);
             }
             catch
             {

@@ -5,14 +5,9 @@ using System.Text;
 
 namespace Laboratorio5ED2.TipoCifrado
 {
-    internal class Cesar : ICifrado
+    public class Cesar : ICifrado
     {
 
-        /***
-         * Revisar por que se puede optimizar un poco más... 
-         * Revisar por que se puede optimizar un poco más... 
-         * 
-         */
 
         private string UpperAbc;
         private string LowerAbc;
