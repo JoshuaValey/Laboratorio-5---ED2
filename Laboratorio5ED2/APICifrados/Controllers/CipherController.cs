@@ -58,14 +58,30 @@ namespace APICifrados.Controllers
                 }
                 else if (method == "zigzag")
                 {
+                    /*FileStream filestream2 = new FileStream(pathFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamReader reader = new StreamReader(filestream2);
                     terminacion = ".zz";
-                    var fileStream = cipher.CifradoZigZag(texto.ToString(), key.level, new StreamReader(file.OpenReadStream()), nombre);
+                    //var fileStream = cipher.CifradoZigZag(texto.ToString(), key.level, new StreamReader(file.OpenReadStream()), nombre);
+                    nombre += terminacion;
+                    var textoCifrado = cipher.CifradoZigZag(linea, key.level, reader, nombre);
+                    FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    //StreamWriter documento = new StreamWriter(filestream);
+                    //documento.WriteLine(textoCifrado);
+                    //documento.Close();
+                    return File(filestream, fileType, nombre);*/
+                    FileStream filestream3 = new FileStream(pathFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamReader reader = new StreamReader(filestream3);
+                    string textoCifrado = cipher.CifradoZigZag(linea, key.level, reader, nombre);
+                    System.IO.File.Delete(pathFile);
+                    terminacion = ".zz";
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
-                    //documento.WriteLine(textoCifrado);
-                    //documento.Close();
-                    return File(filestream, fileType, nombre);
+                    documento.WriteLine(textoCifrado);
+                    documento.Close();
+                    FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamWriter documento2 = new StreamWriter(filestream2);
+                    return File(filestream2, fileType, nombre);
                 }
                 else if (method == "ruta")
                 {
@@ -137,7 +153,9 @@ namespace APICifrados.Controllers
                     documento.Close();
                     var fileResult = File(filestream, fileType, nombre);
                     return fileResult;*/
-                    var fileStream = decipher.DesCifradoZigZag(texto.ToString(), key.level, new StreamReader(file.OpenReadStream()), nombre);
+                    FileStream filestream2 = new FileStream(pathFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamReader reader = new StreamReader(filestream2);
+                    var fileStream = decipher.DesCifradoZigZag(linea, key.level, reader, nombre);
                     FileStream stream = new FileStream(nombre, FileMode.Open, FileAccess.Read);
                     return File(stream, fileType, nombre);
                 }

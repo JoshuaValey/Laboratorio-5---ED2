@@ -54,16 +54,20 @@ namespace Laboratorio5ED2
         #endregion
 
         #region CIFRADO ZIGZAG
-        public FileStream CifradoZigZag(string cadena, int llave, StreamReader file, string nombre)
+        //public FileStream CifradoZigZag(string cadena, int llave, StreamReader file, string nombre)
+        public string CifradoZigZag(string cadena, int llave, StreamReader file, string nombre)
         {
             ZigZag zigzag = new ZigZag(llave);
             FileStream filestream = new FileStream(nombre + ".zz", FileMode.OpenOrCreate, FileAccess.Write);
             StreamWriter documento = new StreamWriter(filestream);
             string fila = "";
+            string completo = "";
+
             while (file.Peek() > -1)
             {
                 string linea = file.ReadLine();
                 string lineaCifrada = zigzag.Cifrar(linea);
+                completo += lineaCifrada;
                 if (!String.IsNullOrEmpty(linea))
                 {
                     documento.WriteLine(lineaCifrada);
@@ -73,30 +77,34 @@ namespace Laboratorio5ED2
             documento.Close();
             file.Close();
             fila = "";
-            return filestream;
+            //return filestream;
+            return completo;
             //return zigzag.Cifrar(cadena);
         }
-        public FileStream DesCifradoZigZag(string cadena, int llave, StreamReader file, string nombre)
+        public string DesCifradoZigZag(string cadena, int llave, StreamReader file, string nombre)
         {
             ZigZag zigzag = new ZigZag(llave);
             FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.Write);
             StreamWriter documento = new StreamWriter(filestream);
             string fila = "";
-            while (file.Peek() > -1)
+            string completo = ""; 
+
+            /*while (file.Peek() > -1)
             {
                 string linea = file.ReadLine();
-                string lineaCifrada = zigzag.DesCifrar(linea);
                 if (!String.IsNullOrEmpty(linea))
                 {
-                    documento.WriteLine(lineaCifrada);
+                    string lineaDescifrada = zigzag.DesCifrar(linea);
+                    completo += lineaDescifrada;
+                    documento.WriteLine(lineaDescifrada);
                 }
                 
                 
             }
             documento.Close();
             file.Close();
-            fila = "";
-            return filestream;
+            fila = "";*/
+            return zigzag.DesCifrar(cadena);
         }
         #endregion
 
