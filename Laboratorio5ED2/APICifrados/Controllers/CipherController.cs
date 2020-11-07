@@ -103,10 +103,13 @@ namespace APICifrados.Controllers
 
             var texto = new StringBuilder();
             using (var reader = new StreamReader(file.OpenReadStream()))
-            while (reader.Peek() >= 0)
             {
-                 texto.AppendLine(await reader.ReadLineAsync());
-                 reader.Close();
+                while (reader.Peek() >= 0)
+                {
+                    texto.AppendLine(await reader.ReadLineAsync());
+                    
+                }
+                reader.Close();
             }
 
             string pathFile = @".\Archivos" + file.FileName;
