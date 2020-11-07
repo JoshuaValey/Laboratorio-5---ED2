@@ -31,6 +31,15 @@ namespace APICifrados.Controllers
                 await file.CopyToAsync(filestream);
             }
 
+            var texto = new StringBuilder();
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            {
+                while (reader.Peek() >= 0)
+                    texto.AppendLine(await reader.ReadLineAsync());
+
+                reader.Close();
+            }
+
             string pathFile = @".\Archivos" + file.FileName;
             FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
             string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
@@ -39,14 +48,12 @@ namespace APICifrados.Controllers
             {
                 if (method == "cesar")
                 {
-                    string textoCifrado = cipher.CifradoCesar(linea, key.word);
                     terminacion = ".csr";
+                    var fileStream = cipher.CifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()),  nombre);
                     nombre += terminacion;
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
-                    documento.WriteLine(textoCifrado);
-                    var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    return File(fileStream, fileType, nombre);
                 }
                 else if (method == "zigzag")
                 {
@@ -94,6 +101,14 @@ namespace APICifrados.Controllers
                 await file.CopyToAsync(filestream);
             }
 
+            var texto = new StringBuilder();
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            while (reader.Peek() >= 0)
+            {
+                 texto.AppendLine(await reader.ReadLineAsync());
+                 reader.Close();
+            }
+
             string pathFile = @".\Archivos" + file.FileName;
             FileStream fileS = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
             string linea = System.IO.File.ReadAllText(pathFile, System.Text.Encoding.Default);
@@ -102,12 +117,8 @@ namespace APICifrados.Controllers
             {
                 if (terminacion == "csr")
                 {
-                    descifrado = decipher.DesCifradoCesar(linea, key.word);
-                    FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    StreamWriter documento = new StreamWriter(filestream);
-                    documento.WriteLine(descifrado);
-                    var fileResult = File(filestream, fileType, nombre);
-                    return fileResult;
+                    var fileStream = decipher.DesCifradoCesar(texto.ToString(), key.word, new StreamReader(file.OpenReadStream()), nombre);
+                    return File(fileStream, fileType, nombre);
                 }
                 else if(terminacion == "zz")
                 {

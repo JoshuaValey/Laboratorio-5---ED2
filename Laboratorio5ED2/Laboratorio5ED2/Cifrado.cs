@@ -10,15 +10,47 @@ namespace Laboratorio5ED2
     public class Cifrado
     {
         #region CIFRADO CESAR
-        public string CifradoCesar(string cadena, string llave)
+        public FileStream CifradoCesar(string cadena, string llave, StreamReader file, string nombre)
         {
             Cesar cesar = new Cesar(llave);
-            return cesar.Cifrar(cadena);
+            FileStream filestream = new FileStream(nombre + ".csr", FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter documento = new StreamWriter(filestream);
+            //documento.WriteLine(textoCifrado);
+            string fila = "";
+            while (file.Peek() > -1)
+            {
+                string linea = file.ReadLine();
+                string lineaCifrada = cesar.Cifrar(linea);
+                if (!String.IsNullOrEmpty(linea))
+                {
+                    documento.WriteLine(lineaCifrada);
+                }
+            }
+            //documento.Close();
+            //file.Close();
+            fila = "";
+            return filestream;
+            //return cesar.Cifrar(cadena);
         }
-        public string DesCifradoCesar(string cadena, string llave)
+        public FileStream DesCifradoCesar(string cadena, string llave, StreamReader file, string nombre)
         {
             Cesar cesar = new Cesar(llave);
-            return cesar.DesCifrar(cadena);
+            FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter documento = new StreamWriter(filestream);
+            //documento.WriteLine(textoCifrado);
+            string fila = "";
+            while (file.Peek() > -1)
+            {
+                string linea = file.ReadLine();
+                string lineaCifrada = cesar.DesCifrar(linea);
+                if (!String.IsNullOrEmpty(linea))
+                {
+                    documento.WriteLine(lineaCifrada);
+                }
+            }
+            //documento.Close();
+            //file.Close();
+            return filestream;
         }
         #endregion
 
