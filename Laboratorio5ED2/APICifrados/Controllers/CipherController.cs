@@ -146,7 +146,6 @@ namespace APICifrados.Controllers
                 else if(terminacion == "rt")
                 {
                     descifrado = decipher.DesCifradoRuta(linea, key.rows, key.columns);
-                    System.IO.File.Delete(pathFile);
                     FileStream filestream = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     StreamWriter documento = new StreamWriter(filestream);
                     documento.WriteLine(descifrado);

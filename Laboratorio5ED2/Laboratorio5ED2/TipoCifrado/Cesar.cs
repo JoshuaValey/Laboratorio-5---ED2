@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Laboratorio5ED2.TipoCifrado
 {
-    public class Cesar : ICifrado
+    internal class Cesar : ICifrado
     {
 
 

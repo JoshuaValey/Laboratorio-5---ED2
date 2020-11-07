@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Laboratorio5ED2.TipoCifrado
 {
-    public class ZigZag : ICifrado
+    internal class ZigZag : ICifrado
     {
 
         private int numNivel;
