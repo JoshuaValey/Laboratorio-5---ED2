@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Laboratorio5ED2.TipoCifrado;
@@ -68,15 +69,39 @@ namespace Laboratorio5ED2
         #endregion
 
         #region CIFRADO RUTA
-        public string CifradoRuta(string cadena, int fila, int columna)
+        public string CifradoRuta(string cadena, int fila, int columna, FileStream aCifrar)
         {
             Ruta ruta = new Ruta();
-            return ruta.Cifrar(cadena, fila, columna);
+            string cifrado2 = "";
+            aCifrar.Position = 0;
+            int cantidadNumeros = 0;
+            int cont = 0;
+
+            using var reader = new BinaryReader(aCifrar);
+            var buffer = new byte[(fila*columna)*20];
+            while (aCifrar.Position < aCifrar.Length)
+            {
+                string lineas = "";
+                buffer = reader.ReadBytes((fila * columna) * 20);
+                foreach(var item in buffer)
+                {
+                    lineas += Convert.ToChar(item);
+                }
+                cifrado2 += ruta.llenarLeer(lineas, fila, columna);
+                cont = ruta.contadorSignos;
+            }
+            reader.Close();
+            aCifrar.Write(buffer);
+            aCifrar.Close();
+
+            cantidadNumeros = (Convert.ToString(ruta.contadorSignos)).Length;
+            cifrado2 = Convert.ToString(cantidadNumeros) + Convert.ToString(ruta.contadorSignos) + cifrado2;
+            return cifrado2;
         }
-        public string DesCifradoRuta(string cadena, int filas, int columnas)
+        public string DesCifradoRuta(string cadena, int fila, int columna, FileStream aDescifrar)
         {
             Ruta ruta = new Ruta();
-            return ruta.DesCifrar(cadena, filas, columnas);
+            return ruta.DesCifrar(cadena, fila, columna);
         }
         #endregion
     }
