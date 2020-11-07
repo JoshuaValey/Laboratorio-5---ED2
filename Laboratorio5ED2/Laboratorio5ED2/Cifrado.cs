@@ -91,6 +91,7 @@ namespace Laboratorio5ED2
                     documento.WriteLine(lineaCifrada);
                 }
                 
+                
             }
             documento.Close();
             file.Close();

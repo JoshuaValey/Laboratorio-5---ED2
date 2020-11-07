@@ -142,7 +142,7 @@ namespace Laboratorio5ED2.TipoCifrado
                 }
                 else
                 {
-                    respuesta = "\n";
+                    respuesta = "";
                 }
             }
 
